@@ -10,15 +10,16 @@ class Square:
         Initializes a new Square instance.
 
         Args:
-            size (int, optional): The size of the square. Defaults to 0.
+            size (int): The size of the square. Defaults to 0.
         """
-        self.__size = size
+        self.size = size
 
         if not isinstance(size, int):
             raise TypeError("size must be an integer")
         elif size < 0:
             raise ValueError("size must be >= 0")
 
+    @property
     def size(self):
         """
         Retrieves the value of the 'size' attribute.
@@ -28,6 +29,7 @@ class Square:
         """
         return self.__size
 
+    @size.setter
     def size(self, value):
         """
         Sets the value of the 'size' attribute.
