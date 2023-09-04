@@ -3,11 +3,11 @@
 
 
 class Rectangle:
+    """Represents a rectangle"""
+
     def __init__(self, width=0, height=0):
         """Initializes a Rectangle instance with the given width and height"""
 
-        self.__width = 0
-        self.__height = 0
         self.width = width
         self.height = height
 
