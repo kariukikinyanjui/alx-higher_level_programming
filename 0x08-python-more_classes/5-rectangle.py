@@ -12,6 +12,7 @@ class Rectangle:
 
     @property
     def width(self):
+        """get the width of the Rectangle"""
         return self.__width
 
     @width.setter
@@ -54,7 +55,9 @@ class Rectangle:
         return "".join(rect)
 
     def __repr__(self):
-        return "Rectangle({}, {})".format(self.__width, self.__height)
+        rect = "Rectangle(" + str(self.__width)
+        rect += ", " + str(self.__height) + ")"
+        return rect
 
     def __del__(self):
         print("Bye rectangle...")
