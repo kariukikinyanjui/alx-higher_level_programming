@@ -55,7 +55,7 @@ class Rectangle:
             rect.append(str(self.print_symbol) * self.__width)
             if a != self.__height - 1:
                 rect.append("\n")
-        return "\n".join(rect)
+        return "".join(rect)
 
     def __repr__(self):
         return "Rectangle({}, {})".format(self.__width, self.__height)
