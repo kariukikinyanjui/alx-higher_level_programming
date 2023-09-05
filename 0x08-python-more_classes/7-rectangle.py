@@ -52,10 +52,10 @@ class Rectangle:
 
         rect = []
         for a in range(self.__height):
-            [rect.append('#') for b in range(self.__width)]
+            rect.append(str(self.print_symbol) * self.__width)
             if a != self.__height - 1:
                 rect.append("\n")
-        return "".join(rect)
+        return "\n".join(rect)
 
     def __repr__(self):
         return "Rectangle({}, {})".format(self.__width, self.__height)
