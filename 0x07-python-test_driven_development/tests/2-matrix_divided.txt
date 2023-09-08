@@ -1,0 +1,38 @@
+"""
+Test cases for the matrix_divided function.
+
+>>> matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+>>> divisor = 2
+>>> result = matrix_divided(matrix, divisor)
+>>> for row in result:
+...     print(row)
+[0.5, 1.0, 1.5]
+[2.0, 2.5, 3.0]
+[3.5, 4.0, 4.5]
+
+# Test dividing a matrix by 0, which should raise a ZeroDivisionError
+>>> matrix_divided(matrix, 0)
+Traceback (most recent call last):
+    ...
+ZeroDivisionError: division by zero
+
+# Test dividing a matrix with non-numeric elements, which should raise a TypeError
+>>> invalid_matrix = [[1, 2, 3], [4, "5", 6], [7, 8, 9]]
+>>> matrix_divided(invalid_matrix, 2)
+Traceback (most recent call last):
+    ...
+TypeError: matrix must be a matrix (list of lists) of integers/floats
+
+# Test dividing a matrix with rows of different lengths, which should raise a TypeError
+>>> uneven_matrix = [[1, 2, 3], [4, 5], [7, 8, 9]]
+>>> matrix_divided(uneven_matrix, 2)
+Traceback (most recent call last):
+    ...
+TypeError: Each row of the matrix must have the same size
+
+# Test dividing by a non-numeric divisor, which should raise a TypeError
+>>> matrix_divided(matrix, "2")
+Traceback (most recent call last):
+    ...
+TypeError: div must be a number
+"""
