@@ -16,14 +16,11 @@ def append_after(filename="", search_string="", new_string=""):
     Returns:
         None
     """
-    try:
-        with open(filename, "r", encoding="utf-8") as file:
-            lines = file.readlines()
-
-        with open(filename, "w", encoding="utf-8") as file:
-            for line in lines:
-                file.write(line)
-                if search_string in line:
-                    file.write(new_string + "\n")
-    except Exception as e:
-        print(f"Error: {e}")
+    text = ""
+    with open(filename) as r:
+        for line in r:
+            text += line
+            if search_string in line:
+                text += new_string
+    with open(filename, "w") as w:
+        w.write(text)
