@@ -36,8 +36,10 @@ class Rectangle(Base):
         Args:
             value (int): New width value.
         """
-        if not isinstance(value, int) or value <= 0:
-            raise ValueError("Width must be a positive integer")
+        if not isinstance(value, int):
+            raise TypeError("width must be an integer")
+        if value <= 0:
+            raise ValueError("width must be > 0")
         self.__width = value
 
     @property
@@ -53,8 +55,10 @@ class Rectangle(Base):
         Args:
             value (int): New height value.
         """
-        if not isinstance(value, int) or value <= 0:
-            raise ValueError("Height must be a positive integer")
+        if not isinstance(value, int):
+            raise TypeError("height must be an integer")
+        if value <= 0:
+            raise ValueError("height must be > 0")
         self.__height = value
 
     @property
@@ -71,7 +75,9 @@ class Rectangle(Base):
             value (int): New x-coordinate value.
         """
         if not isinstance(value, int):
-            raise ValueError("X-coordinate must be an integer")
+            raise TypeError("x must be an integer")
+        if value < 0:
+            raise ValueError("x must be >= 0")
         self.__x = value
 
     @property
@@ -88,5 +94,7 @@ class Rectangle(Base):
             value (int): New y-coordinate value.
         """
         if not isinstance(value, int):
-            raise ValueError("Y-coordinate must be an integer")
+            raise TypeError("y must be an integer")
+        if value < 0:
+            raise ValueError("y must be >= 0")
         self.__y = value
