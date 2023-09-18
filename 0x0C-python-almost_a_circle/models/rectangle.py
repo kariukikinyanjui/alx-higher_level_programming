@@ -111,3 +111,12 @@ class Rectangle(Base):
         """Display the rectangle with '#' characters to stdout."""
         for _ in range(self.__height):
             print("#" * self.__width)
+
+    def __str__(self):
+        """
+        Custom string representation for Rectangle instances.
+
+        Returns:
+            str: String representation of the rectangle.
+        """
+        return f"[Rectangle] ({self.id}) {self.__x}/{self.__y} - {self.__width}/{self.__height}"
