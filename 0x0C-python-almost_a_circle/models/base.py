@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import json
 import csv
+import turtle
 """Define a class Base"""
 
 
@@ -189,3 +190,42 @@ class Base:
                     return instance_list
         except FileNotFoundError:
             return []
+
+    @staticmethod
+    def draw(list_rectangles, list_squares):
+        """
+        Draw Rectangles and Squares using the Turtle graphics module.
+
+        Args:
+            list_rectangles (list): A list of Rectangle instances.
+            list_squares (list): A list of Square instances.
+        """
+        screen = turtle.Screen()
+        screen.title("Draw Rectangles and Squares")
+        screen.bgcolor("white")
+
+        t = turtle.Turtle()
+        t.speed(1)
+
+        for rect in list_rectangles:
+            t.penup()
+            t.goto(rect.x, rect.y)
+            t.pendown()
+            t.color("blue")
+            for _ in range(2):
+                t.forward(rect.width)
+                t.left(90)
+                t.forward(rect.height)
+                t.left(90)
+        for square in list_squares:
+            t.penup()
+            t.goto(square.x, square.y)
+            t.pendown()
+            t.color("red")
+            for _ in range(4):
+                t.forward(square.size)
+                t.left(90)
+
+        screen.exitonclick()
+
+
