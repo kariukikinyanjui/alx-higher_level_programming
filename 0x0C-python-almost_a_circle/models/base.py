@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import json
+import csv
 """Define a class Base"""
 
 
@@ -114,6 +115,31 @@ class Base:
                 setattr(self, key, value)
 
     @classmethod
+    def save_to_file_csv(cls, list_objs):
+        """
+        Serialize a list of instances to a CSV file.
+
+        Args:
+            list_objs (list): A list of instances that inherit from Base.
+        """
+        if list_objs is None:
+            list_objs = []
+
+        class_name = cls.__name__
+        filename = f"{class_name}.csv"
+
+        with open(filename, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            for obj in list_objs:
+                if class_name == "Rectangle":
+                    row = [obj.id, obj.width, obj.height, obj.x, obj.y]
+                elif class_name == "Square":
+                    row = [obj.id, obj.size, obj.x, obj.y]
+                else:
+                    raise ValueError("Unsupported class")
+                writer.writerow(row)
+
+    @classmethod
     def load_from_file(cls):
         """
         Load a list of instances from a JSON file.
@@ -133,5 +159,33 @@ class Base:
                     return [cls.create(**d) for d in list_dict]
                 else:
                     return []
+        except FileNotFoundError:
+            return []
+
+    @classmethod
+    def load_from_file_csv(cls):
+        """
+        Load a list of instances from a CSV file.
+
+        Returns:
+            list: A list of instances loaded from the CSV file.
+        """
+
+        class_name = cls.__name__
+        filename = f"{class_name}.csv"
+
+        try:
+            with open(filename, mode='r', encoding='utf-8') as file:
+                reader = csv.reader(file)
+                instance_list = []
+                for row in reader:
+                    if class_name == "Rectangle":
+                        instance = cls(int(row[1]), int(row[2]), int(row[3]), int(row[4]),int(row[0]))
+                    elif class_name == "Square":
+                        instance = cls(int(row[1]), int(row[2]), int(row[3]), int(row[0]))
+                    else:
+                        raise ValueError("Unsupported class")
+                    instance_list.append(instance)
+                    return instance_list
         except FileNotFoundError:
             return []
