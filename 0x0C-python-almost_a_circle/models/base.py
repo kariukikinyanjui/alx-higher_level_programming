@@ -112,3 +112,26 @@ class Base:
         else:
             for key, value in kwargs.items():
                 setattr(self, key, value)
+
+    @classmethod
+    def load_from_file(cls):
+        """
+        Load a list of instances from a JSON file.
+
+        Returns:
+            list: A list of instances loaded from the JSON file.
+        """
+
+        class_name = cls.__name__
+        filename = f"{class_name}.json"
+
+        try:
+            with open(filename, mode='r', encoding='utf-8') as file:
+                json_string = file.read()
+                if json_string:
+                    list_dict = cls.from_json_string(json_string)
+                    return [cls.create(**d) for d in list_dict]
+                else:
+                    return []
+        except FileNotFoundError:
+            return []
