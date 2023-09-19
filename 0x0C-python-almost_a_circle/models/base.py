@@ -36,7 +36,7 @@ class Base:
         Returns:
             str: JSON string representation of the list of dictionaries.
         """
-        if list_dictionaries is None or len(list_dictionaries) == 0:
+        if list_dictionaries is None or list_dictionaries == []:
             return "[]"
         return json.dumps(list_dictionaries)
 
@@ -48,19 +48,13 @@ class Base:
         Args:
             list_objs (list): A list of instances that inherit from Base.
         """
-
-        if list_objs is None:
-            list_objs = []
-
-        class_name = cls.__name__
-        filename = f"{class_name}.json"
-
-        list_dict = [obj.to_dictionary() for obj in list_objs]
-
-        json_string = cls.to_json_string(list_dict)
-
-        with open(filename, mode='w', encoding='utf-8') as file:
-            file.write(json_string)
+        filename = cls.__name__ + ".json"
+        with open(filename, "w") as jsonfile:
+            if list_objs is None:
+                jsonfile.wirte("[]")
+            else:
+                list_dicts = [o.to_dictionary() for o in list_objs]
+                jsonfile.write(Base.to_json_string(list_dicts))
 
     @staticmethod
     def from_json_string(json_string):
@@ -73,7 +67,7 @@ class Base:
         Returns:
             list: A list of dictionaries represented by the JSON string.
         """
-        if json_string is None or len(json_string) == 0:
+        if json_string is None or json_string == "[]":
             return []
         return json.loads(json_string)
 
@@ -88,16 +82,13 @@ class Base:
         Returns:
             Base: An instance with attributes set from the dictionary.
         """
-        if cls.__name__ == 'Rectangle':
-            dummy_instance = cls(1, 1)
-        elif cls.__name__ == 'Square':
-            dummy_instance = cls(1)
-        else:
-            raise ValueError("Unsupported class")
-
-        dummy_instance.update(**dictionary)
-
-        return dummy_instance
+        if dictionary and dictionary != {}:
+            if cls.__name__ == "Rectangle":
+                new = cls(1, 1)
+            else:
+                new = cls(1)
+            new.update(**dictionary)
+            return new
 
     def update(self, *args, **kwargs):
         """
@@ -123,22 +114,18 @@ class Base:
         Args:
             list_objs (list): A list of instances that inherit from Base.
         """
-        if list_objs is None:
-            list_objs = []
-
-        class_name = cls.__name__
-        filename = f"{class_name}.csv"
-
-        with open(filename, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            for obj in list_objs:
-                if class_name == "Rectangle":
-                    row = [obj.id, obj.width, obj.height, obj.x, obj.y]
-                elif class_name == "Square":
-                    row = [obj.id, obj.size, obj.x, obj.y]
+        filename = cls.__name__ + ".csv"
+        with open(filename, "w", newline="") as csvfile:
+            if list_objs is None or list_objs == []:
+                csvfile.write("[]")
+            else:
+                if cls.__name__ == "Rectangle":
+                    fieldnames = ["id", "width", "height", "x", "y"]
                 else:
-                    raise ValueError("Unsupported class")
-                writer.writerow(row)
+                    fieldnames = ["id", "size", "x", "y"]
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                for obj in list_objs:
+                    writer.writerow(obj.to_dictionary())
 
     @classmethod
     def load_from_file(cls):
@@ -164,32 +151,50 @@ class Base:
             return []
 
     @classmethod
-    def load_from_file_csv(cls):
+    def load_from_file_csv(cls, list_objs):
         """
         Load a list of instances from a CSV file.
 
         Returns:
             list: A list of instances loaded from the CSV file.
         """
+        filename = cls.__name__ + ".csv"
+        with open(filename, "w", newline="") as csvfile:
+            if list_objs is None or list_objs == []:
+                csvfile.write("[]")
+            else:
+                if cls.__name__ == "Rectangle":
+                    fieldnames = ["id", "width", "height", "x", "y"]
+                else:
+                    fieldnames = ["id", "size", "x", "y"]
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                for obj in list_objs:
+                    writer.writerow(obj.to_dictionary())
 
-        class_name = cls.__name__
-        filename = f"{class_name}.csv"
+    @classmethod
+    def load_from_file_csv(cls):
+        """
+        Return a list of classes instantiated from a CSV file.
 
+        Reads from '<cls.__name__>.csv'
+
+        Returns:
+        if the file does not exist - an empty list.
+        otherwise - a list of instantiated classes.
+        """
+        filename = cls.__name__ + ".csv"
         try:
-            with open(filename, mode='r', encoding='utf-8') as file:
-                reader = csv.reader(file)
-                instance_list = []
-                for row in reader:
-                    if class_name == "Rectangle":
-                        instance = cls(int(row[1]), int(row[2]), int(row[3]), int(row[4]),int(row[0]))
-                    elif class_name == "Square":
-                        instance = cls(int(row[1]), int(row[2]), int(row[3]), int(row[0]))
-                    else:
-                        raise ValueError("Unsupported class")
-                    instance_list.append(instance)
-                    return instance_list
-        except FileNotFoundError:
+            with open(filename, "r", newline="") as csvfile:
+                if cls.__name__ == "Rectangle":
+                    fieldnames = ["id", "width", "height", "x", "y"]
+                else:
+                    fieldnames = ["id", "size", "x", "y"]
+                list_dicts = csv.DictReader(csvfile, fieldnames= fieldnames)
+                list_dicts = [dict([k, int(v)] for k, v in d.items()) for d in list_dicts]
+                return [cls.create(**d) for d in list_dicts]
+        except IOError:
             return []
+
 
     @staticmethod
     def draw(list_rectangles, list_squares):
@@ -200,32 +205,37 @@ class Base:
             list_rectangles (list): A list of Rectangle instances.
             list_squares (list): A list of Square instances.
         """
-        screen = turtle.Screen()
-        screen.title("Draw Rectangles and Squares")
-        screen.bgcolor("white")
+        turt = turtle.Turtle()
+        turt.screen.bgcolor("#b7312c")
+        turt.pensize(3)
+        turt.shape("turtle")
 
-        t = turtle.Turtle()
-        t.speed(1)
-
+        turt.color("#ffffff")
         for rect in list_rectangles:
-            t.penup()
-            t.goto(rect.x, rect.y)
-            t.pendown()
-            t.color("blue")
-            for _ in range(2):
-                t.forward(rect.width)
-                t.left(90)
-                t.forward(rect.height)
-                t.left(90)
-        for square in list_squares:
-            t.penup()
-            t.goto(square.x, square.y)
-            t.pendown()
-            t.color("red")
-            for _ in range(4):
-                t.forward(square.size)
-                t.left(90)
+            turt.showturtle()
+            turt.up()
+            turt.goto(rect.x, rect.y)
+            turt.down()
+            for i in range(2):
+                turt.forward(rect.width)
+                turt.left(90)
+                turt.forward(rect.height)
+                turt.left(90)
+            turt.hideturtle()
 
-        screen.exitonclick()
+        turt.color("#b5e3d8")
+        for sq in list_squares:
+            turt.showturtle()
+            turt.up()
+            turt.goto(sq.x, sq.y)
+            turt.down()
+            for i in range(2):
+                turt.forward(sq.width)
+                turt.left(90)
+                turt.forward(sq.height)
+                turt.left(90)
+            turt.hideturtle()
+
+        turtle.exitonclick()
 
 
