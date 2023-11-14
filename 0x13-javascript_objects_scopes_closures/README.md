@@ -4,7 +4,7 @@
 ## Concepts
 * [JavaScript object basics](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Basics)
 * [Object-oriented JavaScript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Basics)
-* [Class - ES6](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
+* [Class - ES6](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
 * [super - ES6](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super)
 * [extends - ES6](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/extends)
 * [Object prototypes](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes)
