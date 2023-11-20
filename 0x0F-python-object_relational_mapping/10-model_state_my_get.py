@@ -22,12 +22,12 @@ if __name__ == "__main__":
     dbSession = sessionmaker(bind=engine)
     session = dbSession()
 
-    state_name = sys.argv[4]
-    results = session.query(State).filter(State.name == state_name).first()
+    for state_name in sys.argv[4:]:
+        state = session.query(State).filter(State.name == state_name).first()
 
-    if results:
-        print(results.id)
-    else:
-        print('Nothing')
+        if state:
+            print(state.id)
+        else:
+            print('Not found')
 
     session.close()
