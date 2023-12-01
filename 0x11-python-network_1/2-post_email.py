@@ -2,6 +2,9 @@
 """Sends a POST  request with an email parameter"""
 import sys
 import urllib.request
+if len(sys.argv) != 3:
+    print("{} <URL> <email>".format(sys.argv[0]))
+    sys.exit(1)
 
 url = sys.argv[1]
 email = sys.argv[2]
