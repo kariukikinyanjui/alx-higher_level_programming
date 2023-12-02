@@ -2,6 +2,9 @@
 """Takes in a URL, sends a request, and displays the value of X-Request-Id"""
 import requests
 import sys
+if len(sys.argv) != 2:
+    print("{} <URL>".format(sys.argv[0]))
+    sys.exit(1)
 
 url = sys.argv[1]
 
